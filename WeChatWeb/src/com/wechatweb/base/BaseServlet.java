@@ -1,5 +1,6 @@
 package com.wechatweb.base;
 
+import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -11,23 +12,29 @@ import java.io.IOException;
 public class BaseServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws javax.servlet.ServletException, IOException {
 
-        //xml数据解析
+        //xml鏁版嵁瑙ｆ瀽
+        ServletInputStream inputStream = request.getInputStream();
 
-        //分析fromUser
+        //鍒嗘瀽fromUser
 
-        //分析action
+        //鍒嗘瀽action
 
-        //处理
-
+        //澶勭悊
+        System.out.print("doPost+success");
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws javax.servlet.ServletException, IOException {
-        //验证部分
+        //楠岃瘉閮ㄥ垎
+        System.out.print("doGet+success");
         request.getParameter("signature");
         request.getParameter("timestamp");
         request.getParameter("nonce");
         String echostr = request.getParameter("echostr");
-        response.getWriter().write(echostr);
+        if(echostr==null){
+            response.getWriter().write("null string");
+        }else{
+            response.getWriter().write(echostr);
+        }
         response.getWriter().flush();
     }
 }
