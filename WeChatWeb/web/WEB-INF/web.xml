@@ -11,6 +11,7 @@
     <servlet>
         <servlet-name>WeiDuServlet</servlet-name>
         <servlet-class>com.wechatweb.action.WeiDuServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
     </servlet>
 
     <welcome-file-list>

@@ -1,16 +1,15 @@
 package com.wechatweb.base;
 
 import com.wechatweb.entitiy.receivemsg.BaseReceiveMsgEntity;
+import com.wechatweb.entitiy.receivemsg.TextReceiveMsgEntity;
 import com.wechatweb.service.Logger;
 import com.wechatweb.service.ReadService;
-import org.dom4j.Document;
-import org.dom4j.DocumentException;
-import org.dom4j.io.SAXReader;
 
 import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.xml.parsers.SAXParser;
 import java.io.IOException;
 
 /**
@@ -25,18 +24,20 @@ public class BaseServlet extends HttpServlet {
         super();
     }
 
-
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws javax.servlet.ServletException, IOException {
         logger.showMessage("doPost+success");
         //xml数据解析
         ServletInputStream inputStream = request.getInputStream();
         BaseReceiveMsgEntity msgEntity = readService.readXML(inputStream);
         //分析fromUser
-
-        //分析action
-
         //处理输出报文
-
+        if (msgEntity instanceof TextReceiveMsgEntity) {
+            logger.showMessage("MSGTYPE:" + msgEntity.mMsgType + "，fromUserName" + msgEntity.mFromUserName + "，content:" + ((TextReceiveMsgEntity) msgEntity).mContent);
+        } else {
+            logger.showMessage("MSGTYPE:" + msgEntity.mMsgType + "，fromUserName" + msgEntity.mFromUserName + "，不支持的消息类型");
+        }
+        response.getWriter().write("success");
+        response.getWriter().flush();
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws javax.servlet.ServletException, IOException {
