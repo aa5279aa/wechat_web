@@ -1,6 +1,7 @@
 package com.wechatweb.service;
 
-import com.sun.xml.internal.ws.util.StringUtils;
+import com.wechatweb.entitiy.EventEntity;
+import com.wechatweb.entitiy.receiveevent.BaseReceiveEventEntity;
 import com.wechatweb.entitiy.receivemsg.BaseReceiveMsgEntity;
 import com.wechatweb.entitiy.receivemsg.ImageReceiveMsgEntity;
 import com.wechatweb.entitiy.receivemsg.LinkReceiveMsgEntity;
@@ -24,47 +25,91 @@ public class ReadService {
     }
 
 
-    public BaseReceiveMsgEntity readXML(InputStream inputStream) {
-        BaseReceiveMsgEntity msgEntity = new BaseReceiveMsgEntity();
+    public EventEntity readXML(InputStream inputStream) {
+        EventEntity eventEntity = new EventEntity();
         try {
             Document read = reader.read(inputStream);
             Element node = read.getRootElement();
-            msgEntity = parser2Entity(node);
+            eventEntity = parser2Entity(node);
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return msgEntity;
+        return eventEntity;
     }
 
-    public BaseReceiveMsgEntity parser2Entity(Element node) {
-        BaseReceiveMsgEntity entity = parserTypePart(node);
-        parserBasePart(node, entity);
-        return entity;
+    public EventEntity parser2Entity(Element node) {
+        //解析类型
+        EventEntity eventEntity = pareserType(node);
+
+        //解析数据类型
+        if (eventEntity.mEventType == EventEntity.EVENTTYPE_MSG) {
+            BaseReceiveMsgEntity entity = parserMessage(eventEntity, node);
+            eventEntity.msgEntity = entity;
+        } else if (eventEntity.mEventType == EventEntity.EVENTTYPE_EVENT) {
+            BaseReceiveEventEntity entity = parserEvent(eventEntity, node);
+            eventEntity.eventEntity =entity;
+        }
+        return eventEntity;
     }
 
-    private BaseReceiveMsgEntity parserTypePart(Element node) {
+    public EventEntity pareserType(Element node) {
         Element msgTypeElement = node.element("MsgType");
+        if (msgTypeElement == null || !msgTypeElement.hasContent()) {
+            return null;
+        }
         String msgTypeStr = "";
-        if (msgTypeElement.hasContent()) {
-            try {
-                msgTypeStr = msgTypeElement.getText();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-        BaseReceiveMsgEntity baseReceiveMsgEntity = new BaseReceiveMsgEntity();
-        if (StringUtil.isBlank(msgTypeStr)) {
-            baseReceiveMsgEntity.mMsgType = BaseReceiveMsgEntity.MSG_TYPE_NONE;
-            return baseReceiveMsgEntity;
-        }
+        msgTypeStr = msgTypeElement.getText();
+        EventEntity eventEntity = new EventEntity();
+
+        //信息类型
         if (msgTypeStr.equals("text")) {
+            eventEntity.mEventType = EventEntity.EVENTTYPE_MSG;
+            eventEntity.mSubType = BaseReceiveMsgEntity.MSG_TYPE_TEXT;
+        } else if (msgTypeStr.equals("image")) {
+            eventEntity.mEventType = EventEntity.EVENTTYPE_MSG;
+            eventEntity.mSubType = BaseReceiveMsgEntity.MSG_TYPE_IMAGE;
+        } else if (msgTypeStr.equals("voice")) {
+            eventEntity.mEventType = EventEntity.EVENTTYPE_MSG;
+            eventEntity.mSubType = BaseReceiveMsgEntity.MSG_TYPE_VOICE;
+        } else if (msgTypeStr.equals("video")) {
+            eventEntity.mEventType = EventEntity.EVENTTYPE_MSG;
+            eventEntity.mSubType = BaseReceiveMsgEntity.MSG_TYPE_VIDEO;
+        } else if (msgTypeStr.equals("shortvideo")) {
+            eventEntity.mEventType = EventEntity.EVENTTYPE_MSG;
+            eventEntity.mSubType = BaseReceiveMsgEntity.MSG_TYPE_SHORTVIDEO;
+        } else if (msgTypeStr.equals("location")) {
+            eventEntity.mEventType = EventEntity.EVENTTYPE_MSG;
+            eventEntity.mSubType = BaseReceiveMsgEntity.MSG_TYPE_LOCATION;
+        } else if (msgTypeStr.equals("link")) {
+            eventEntity.mEventType = EventEntity.EVENTTYPE_MSG;
+            eventEntity.mSubType = BaseReceiveMsgEntity.MSG_TYPE_LINK;
+        }
+        if (eventEntity.mEventType > 0) {
+            return eventEntity;
+        }
+
+        //事件类型
+        if (msgTypeStr.equals("event")) {
+
+        }
+        return eventEntity;
+    }
+
+    public BaseReceiveEventEntity parserEvent(EventEntity eventEntity, Element node){
+        BaseReceiveEventEntity event=new BaseReceiveEventEntity();
+        return event;
+    }
+
+    private BaseReceiveMsgEntity parserMessage(EventEntity eventEntity, Element node) {
+        BaseReceiveMsgEntity baseReceiveMsgEntity = new BaseReceiveMsgEntity();
+        baseReceiveMsgEntity.mMsgType = eventEntity.mSubType;
+        if (eventEntity.mSubType == BaseReceiveMsgEntity.MSG_TYPE_TEXT) {
             Element contentElement = node.element("Content");
             String content = contentElement.getText();
             TextReceiveMsgEntity entity = new TextReceiveMsgEntity();
             entity.mContent = content;
             baseReceiveMsgEntity = entity;
-            baseReceiveMsgEntity.mMsgType = BaseReceiveMsgEntity.MSG_TYPE_TEXT;
-        } else if (msgTypeStr.equals("image")) {
+        } else if (eventEntity.mSubType == BaseReceiveMsgEntity.MSG_TYPE_IMAGE) {
             Element picUrlElement = node.element("PicUrl");
             Element mediaIdElement = node.element("MediaId");
             String picUrl = picUrlElement.getText();
@@ -73,16 +118,11 @@ public class ReadService {
             entity.mPicUrl = picUrl;
             entity.mMediaId = mediaId;
             baseReceiveMsgEntity = entity;
-            baseReceiveMsgEntity.mMsgType = BaseReceiveMsgEntity.MSG_TYPE_IMAGE;
-        } else if (msgTypeStr.equals("voice")) {
-            baseReceiveMsgEntity.mMsgType = BaseReceiveMsgEntity.MSG_TYPE_VOICE;
-        } else if (msgTypeStr.equals("video")) {
-            baseReceiveMsgEntity.mMsgType = BaseReceiveMsgEntity.MSG_TYPE_VIDEO;
-        } else if (msgTypeStr.equals("shortvideo")) {
-            baseReceiveMsgEntity.mMsgType = BaseReceiveMsgEntity.MSG_TYPE_SHORTVIDEO;
-        } else if (msgTypeStr.equals("location")) {
-            baseReceiveMsgEntity.mMsgType = BaseReceiveMsgEntity.MSG_TYPE_LOCATION;
-        } else if (msgTypeStr.equals("link")) {
+        } else if (eventEntity.mSubType == BaseReceiveMsgEntity.MSG_TYPE_VOICE) {
+        } else if (eventEntity.mSubType == BaseReceiveMsgEntity.MSG_TYPE_VIDEO) {
+        } else if (eventEntity.mSubType == BaseReceiveMsgEntity.MSG_TYPE_SHORTVIDEO) {
+        } else if (eventEntity.mSubType == BaseReceiveMsgEntity.MSG_TYPE_LOCATION) {
+        } else if (eventEntity.mSubType == BaseReceiveMsgEntity.MSG_TYPE_LINK) {
             Element titleElement = node.element("Title");
             Element descriptionElement = node.element("Description");
             Element urlElement = node.element("Url");
@@ -95,28 +135,29 @@ public class ReadService {
             entity.mUrl = url;
             baseReceiveMsgEntity = entity;
         }
+        parserBasePart(baseReceiveMsgEntity, node);
         return baseReceiveMsgEntity;
     }
 
-    public void parserBasePart(Element node, BaseReceiveMsgEntity entity) {
+    public void parserBasePart(BaseReceiveMsgEntity entity, Element node) {
         Element toUserName = node.element("ToUserName");
         Element fromUserName = node.element("FromUserName");
         Element createTime = node.element("CreateTime");
         Element msgId = node.element("MsgId");
-        if (toUserName.hasContent()) {
+        if (toUserName != null && toUserName.hasContent()) {
             entity.mToUserName = toUserName.getText();
         }
-        if (fromUserName.hasContent()) {
+        if (fromUserName != null && fromUserName.hasContent()) {
             entity.mFromUserName = fromUserName.getText();
         }
-        if (createTime.hasContent()) {
+        if (createTime != null && createTime.hasContent()) {
             try {
                 entity.mCreateTime = Long.parseLong(createTime.getTextTrim());
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
-        if (msgId.hasContent()) {
+        if (msgId != null && msgId.hasContent()) {
             entity.mMsgId = msgId.getText();
         }
     }

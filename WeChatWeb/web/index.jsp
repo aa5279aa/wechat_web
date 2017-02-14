@@ -104,7 +104,7 @@
 </head>
 <body>
 <div id="stylized" class="myform">
-    <form id="form" name="form" method="post" action="cr" onSubmit="return toVaild()">
+    <form name="form" method="post" action="weidu" enctype="multipart/form-data">
         <h1 style="text-align:center">在线测试工具</h1>
         <label>
             <span class="small">选择文件提交</span>
