@@ -3,6 +3,7 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
          version="3.1">
+    <!--收发消息-->
     <servlet-mapping>
         <servlet-name>WeiDuServlet</servlet-name>
         <url-pattern>/weidu</url-pattern>
@@ -10,7 +11,7 @@
 
     <servlet-mapping>
         <servlet-name>WeiDuServlet</servlet-name>
-        <url-pattern>/weidutest</url-pattern>
+        <url-pattern>/weidu_test</url-pattern>
     </servlet-mapping>
 
     <servlet>
@@ -19,8 +20,32 @@
         <load-on-startup>1</load-on-startup>
     </servlet>
 
+    <!--发消息-->
+    <servlet-mapping>
+        <servlet-name>WeiDuSendServlet</servlet-name>
+        <url-pattern>/weidu_send</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>WeiDuSendServlet</servlet-name>
+        <servlet-class>com.wechatweb.action.WeiDuServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+
+    <!--创建菜单-->
+    <servlet-mapping>
+        <servlet-name>WeiDuMenuServlet</servlet-name>
+        <url-pattern>/weidu_menu</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>WeiDuMenuServlet</servlet-name>
+        <servlet-class>com.wechatweb.action.WeiDuMenuServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+
     <welcome-file-list>
         <welcome-file>index.jsp</welcome-file>
-        <welcome-file>index1.jsp</welcome-file>
     </welcome-file-list>
+
 </web-app>

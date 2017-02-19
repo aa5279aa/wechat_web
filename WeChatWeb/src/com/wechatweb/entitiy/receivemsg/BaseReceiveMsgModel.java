@@ -3,7 +3,7 @@ package com.wechatweb.entitiy.receivemsg;
 /**
  * Created by xiangleiliu on 2017/2/13.
  */
-public class BaseReceiveMsgEntity {
+public class BaseReceiveMsgModel {
     public static final int MSG_TYPE_NONE = 0;
     public static final int MSG_TYPE_TEXT = 1;
     public static final int MSG_TYPE_IMAGE = 2;

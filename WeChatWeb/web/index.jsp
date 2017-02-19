@@ -5,7 +5,7 @@
   Time: 14:05
   To change this template use File | Settings | File Templates.
 --%>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" language="java" %>
 <html>
 <head>
     <title> - 在线请求测试工具 - </title>
@@ -31,21 +31,17 @@
             margin: 0 auto;
             width: 600px;
             padding: 14px;
-        }
-
-        /* ———– stylized ———– */
-        #stylized {
             border: solid 2px #b7ddf2;
             background: #ebf4fb;
         }
 
-        #stylized h1 {
+        .myform h1 {
             font-size: 16px;
             font-weight: bold;
             margin-bottom: 8px;
         }
 
-        #stylized p {
+        .myform p {
             font-size: 12px;
             color: #666666;
             margin-bottom: 20px;
@@ -53,7 +49,7 @@
             padding-bottom: 10px;
         }
 
-        #stylized label {
+        .myform label {
             display: block;
             font-weight: bold;
             text-align: right;
@@ -61,7 +57,7 @@
             float: left;
         }
 
-        #stylized .small {
+        .myform .small {
             color: #666666;
             display: block;
             font-size: 11px;
@@ -70,7 +66,7 @@
             width: 140px;
         }
 
-        #stylized input {
+        .myform input {
             float: left;
             font-size: 15px;
             padding: 4px 2px;
@@ -79,7 +75,7 @@
             margin: 2px 0 20px 10px;
         }
 
-        #stylized .sub {
+        .myform .sub {
             clear: both;
             margin-left: 150px;
             width: 120px;
@@ -115,7 +111,38 @@
 
         <div class="spacer"></div>
     </form>
+</div>
 
+<div class="spacer"></div>
+
+<div id="stylized_2" class="myform">
+    <form name="form" method="post" action="weidu_send" enctype="multipart/form-data">
+        <h1 style="text-align:center">在线发消息测试工具</h1>
+        <table>
+            <tr>
+                <td>
+                    <label>
+                        <span class="small">请输入接收用户Id</span>
+                    </label>
+                    <input type="text" name="userId" id="input_userid" value=""/>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label>
+                        <span class="small">请输入消息内容</span>
+                    </label>
+                    <input type="text" name="message" id="input_msg" value=""/>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <input class="sub" type="submit" value="提交"/>
+                </td>
+            </tr>
+        </table>
+        <div class="spacer"></div>
+    </form>
 </div>
 </body>
 </html>
