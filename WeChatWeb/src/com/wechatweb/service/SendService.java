@@ -17,8 +17,6 @@ import java.io.OutputStream;
  */
 public class SendService {
 
-    SAXReader reader = new SAXReader();
-
     public void createTextMessage(OutputStream os,String ToUserName,String FromUserName, String mContent) throws IOException {
         Element root = DocumentHelper.createElement("xml");
         Document document = DocumentHelper.createDocument(root);
@@ -31,7 +29,7 @@ public class SendService {
 
         //把生成的xml文档存放在硬盘上  true代表是否换行
         OutputFormat format = new OutputFormat("    ", true);
-        format.setEncoding("GBK");//设置编码格式
+        format.setEncoding("UTF-8");//设置编码格式
         XMLWriter xmlWriter = new XMLWriter(os, format);
 
         xmlWriter.write(document);

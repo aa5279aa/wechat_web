@@ -8,6 +8,11 @@
         <url-pattern>/weidu</url-pattern>
     </servlet-mapping>
 
+    <servlet-mapping>
+        <servlet-name>WeiDuServlet</servlet-name>
+        <url-pattern>/weidutest</url-pattern>
+    </servlet-mapping>
+
     <servlet>
         <servlet-name>WeiDuServlet</servlet-name>
         <servlet-class>com.wechatweb.action.WeiDuServlet</servlet-class>

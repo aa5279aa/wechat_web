@@ -43,8 +43,9 @@ public class BaseServlet extends HttpServlet {
         InputStream inputStream = null;
         DiskFileItemFactory factory = new DiskFileItemFactory();
         ServletFileUpload upload = new ServletFileUpload(factory);
-        String remoteHost = request.getRemoteHost();
-        if (remoteHost.equals("localhost") || remoteHost.equals("127.0.0.1")) {
+        String remoteAddr = request.getRemoteAddr();
+        logger.showMessage("request.getRequestURL():" + request.getRequestURL());
+        if (request.getRequestURL().toString().endsWith("test")) {
             List<FileItem> fileItems = null;
             try {
                 fileItems = upload.parseRequest(request);
